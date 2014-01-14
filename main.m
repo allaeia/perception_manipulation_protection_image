@@ -26,12 +26,11 @@ numbers*w>0
 function err = influence_iterations(max_iter)
     err = zeros(max_iter,1);
     for i=1:max_iter+1
-        w = perceptron( numbers, out, .1618, i);
-        res = xor(numbers*w>0, (out+1)/2)
+        lw = perceptron( numbers, out, .1618, i);
+        res = xor(numbers*lw>0, (out+1)/2);
         err(i) = 100* (res' * ones(size(out))) / size(out,1);
     end
 end
 plot(influence_iterations(60));
 
-%numbers*w
 end

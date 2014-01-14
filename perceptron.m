@@ -11,7 +11,6 @@ end
 
 
 	w = rand(size(in,2),1)*2-1;
-    w
 	delta_w = zeros(size(in,2),1);
 	iter=0;
 	while iter < max_iter
