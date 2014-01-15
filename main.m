@@ -1,8 +1,3 @@
-%% Matrix 
-% [ one : 0,1,1,0,0,0,0
-%   two : 1,1,0,1,1,0,1
-%   ...
-% ]
 function main()
 numbers = [1,1,1,1,1,1,1,0;
            1,0,1,1,0,0,0,0;
@@ -14,13 +9,13 @@ numbers = [1,1,1,1,1,1,1,0;
            1,1,1,1,0,0,0,1;
            1,1,1,1,1,1,1,1;
            1,1,1,1,0,0,1,1 ]
-       numbers = numbers * 2 - 1;
+numbers = numbers * 2 - 1;
 out = [0;1;0;1;0;1;0;1;0;1];
 out = out *2 -1;
 %numbers = [ 1,0,0;1,0,1;1,1,0;1,1,1]
 %out=[-1;1;1;1]
 
-w = perceptron( numbers, out, .1618, 100)
+w = perceptron( numbers, out, .1618, 50)
 numbers*w>0
 
 function err = influence_iterations(max_iter)
