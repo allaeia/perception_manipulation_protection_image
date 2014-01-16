@@ -25,7 +25,9 @@ function err = influence_iterations(max_iter)
         res = xor(numbers*lw>0, (out+1)/2);
         err(i) = 100* (res' * ones(size(out))) / size(out,1);
     end
+    disp('erreur');
+    disp(err);
 end
+figure('Name','evoluticlon erreur','NumberTitle','off');
 plot(influence_iterations(60));
-
 end
