@@ -1,4 +1,5 @@
 function w = perceptron(in,out, epsilon, max_iter)
+
 function result = sigma(x)
     result = 1./(1+exp(-x));
 end
