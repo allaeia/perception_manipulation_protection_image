@@ -20,16 +20,14 @@ numbers*w>0
 
 function err = influence_iterations(max_iter)
     err = zeros(max_iter,1);
-    cpt=1;
-    for i=-2:0.01:max_iter
-        lw = perceptron( numbers, out, i, 50);
+    for i=1:max_iter+1
+        lw = perceptron( numbers, out, .2, i);
         res = xor(numbers*lw>0, (out+1)/2);
-        err(cpt) = 100* (res' * ones(size(out))) / size(out,1);
-        cpt=cpt+1;
+        err(i) = 100* (res' * ones(size(out))) / size(out,1);
     end
     disp('erreur');
     disp(err);
 end
 figure('Name','evoluticlon erreur','NumberTitle','off');
-plot(influence_iterations(2));
+plot(influence_iterations(60));
 end
