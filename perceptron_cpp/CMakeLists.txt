@@ -9,12 +9,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.6)
 SET(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 SET(CMAKE_BUILD_TYPE Debug)
 
-# Set cpp flags
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-set(CMAKE_CSS_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-set (CMAKE_CXX_FLAGS -std=gnu++0x)
-#set(CMAKE_CXX_FLAGS "-Wall -W -Werror -ansi -pedantic -g")
-
 # Path to the cmake module path
 set(CMAKE_MODULE_PATH "/home/arnaud/programmation/CMakeModules" ${CMAKE_CURRENT_SOURCE_DIR}/../../CMakeModules)
 
@@ -42,7 +36,7 @@ set( EXTRA_INCLUDES
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 set(CMAKE_CSS_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
-set (CMAKE_CXX_FLAGS -std=gnu++0x)
+set (CMAKE_CXX_FLAGS "-std=c++11 -O3 -march=native")
 
 
 project(${PROJECT_NAME})

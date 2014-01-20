@@ -20,8 +20,8 @@
 
 #include <functional>
 #include <cmath>
-#include <ctime>
 #include <iostream>
+#include <chrono>
 
 
 using namespace std;
@@ -29,24 +29,27 @@ using namespace std;
 using Eigen::Matrix;
 
 template<typename T, int Rows, int Cols>
-    Matrix<T, Cols, 1>
+Matrix<T, Cols, 1>
 perceptron(Matrix<T, Rows, Cols> in, Matrix<T, Rows, 1> out, std::function<T(T)> sigma_d, T epsilon, int max_iter)
 {
     Matrix<T, Cols, 1> w;
-    for (int i = 0; i < Cols; i++ ) {
-        w(i, 0) = (double)rand()/RAND_MAX;
+    for (int i = 0; i < Cols; i++ )
+    {
+        w(i, 0) = (double)rand() / RAND_MAX;
     }
 
     Matrix<T, Cols, 1> delta_w = Matrix<T, Cols, 1>::Zero();
     int iter = 0;
-    while (iter < max_iter) {
+    while (iter < max_iter)
+    {
         delta_w = Matrix<T, Cols, 1>::Zero();
         Matrix<T, Rows, 1> in_w = in * w;
-        for (int i = 0; i < Cols; i++ ) {
-                auto s = ((out-in_w).transpose()*in.col(i));
-                T sigm = sigma_d(in_w(i, 0));
-                s *= epsilon * sigm;
-                delta_w(i, 0) += s;
+        for (int i = 0; i < Cols; i++ )
+        {
+            auto s = ((out - in_w).transpose() * in.col(i));
+            T sigm = sigma_d(in_w(i, 0));
+            s *= epsilon * sigm;
+            delta_w(i, 0) += s;
         }
         w = w + delta_w;
         ++iter;
@@ -59,8 +62,9 @@ Matrix<T, NbWeights, 1>
 threshold(Matrix<T, NbWeights, 1> m)
 {
     Matrix<T, NbWeights, 1> r;
-    for (int i = 0; i < NbWeights; i++ ) {
-        r(i, 0) = m(i, 0)>0;
+    for (int i = 0; i < NbWeights; i++ )
+    {
+        r(i, 0) = m(i, 0) > 0;
     }
     return r;
 }
@@ -71,34 +75,50 @@ int main(int argc, char const* argv[])
     const int rows = 10;
     const int cols = 8;
     Matrix<double, rows, cols> numbers;
-    numbers << 1,1,1,1,1,1,1,-1,
-            1,-1,1,1,-1,-1,-1,-1,
-            1,1,1,-1,1,1,-1,1,
-            1,1,1,1,1,-1,-1,1,
-            1,-1,-1,1,-1,-1,1,1,
-            1,1,-1,1,1,-1,1,1,
-            1,-1,-1,1,1,1,1,1,
-            1,1,1,1,-1,-1,-1,1,
-            1,1,1,1,1,1,1,1,
-            1,1,1,1,-1,-1,1,1;
+    numbers << 1, 1, 1, 1, 1, 1, 1, -1,
+            1, -1, 1, 1, -1, -1, -1, -1,
+            1, 1, 1, -1, 1, 1, -1, 1,
+            1, 1, 1, 1, 1, -1, -1, 1,
+            1, -1, -1, 1, -1, -1, 1, 1,
+            1, 1, -1, 1, 1, -1, 1, 1,
+            1, -1, -1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, -1, -1, -1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, -1, -1, 1, 1;
     Matrix<double, rows, 1> out;
     out << -1, 1, -1, 1, -1, 1, -1, 1, -1, 1;
 
     cout << "Numbers: " << endl << numbers << endl;
     cout << "Out: " << endl << out << endl << endl;
 
-    auto sigma = [](double x) {
-        return 1./(1.+exp(-x));
+    auto sigma = [](double x)
+    {
+        return 1. / (1. + exp(-x));
     };
-    auto sigma_d = [&sigma](double x) {
+    auto sigma_d = [&sigma](double x)
+    {
         const double s = sigma(x);
-        return s*(1-s);
+        return s * (1 - s);
     };
 
     const auto w = perceptron<double, rows, cols>(numbers, out, sigma_d, .1618, 100);
     const auto result = numbers * w;
-    cout << "weights: " << endl << result <<endl << endl;
-    cout << "result: " << endl << threshold<double, rows>(result) <<endl << endl;
+    cout << "weights: " << endl << result << endl << endl;
+    cout << "result: " << endl << threshold<double, rows>(result) << endl << endl;
+
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+    for (int i = 0; i < 300; i++)
+    {
+        perceptron<double, rows, cols>(numbers, out, sigma_d, .1618, 100);
+    }
+    end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+    std::cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s\n";
 
     return 0;
 }

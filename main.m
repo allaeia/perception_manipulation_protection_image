@@ -31,6 +31,12 @@ function err = influence_iterations(max_iter)
         err(i) = 100* (res' * ones(size(out))) / size(out,1);
     end
 end
-plot(influence_iterations(60));
+%plot(influence_iterations(60));
+
+tic
+for i=1:300
+perceptron( numbers, out, .1618, 1000);
+end
+toc
 
 end
