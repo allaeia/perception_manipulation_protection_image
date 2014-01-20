@@ -110,7 +110,7 @@ int main(int argc, char const* argv[])
     start = std::chrono::system_clock::now();
     for (int i = 0; i < 300; i++)
     {
-        perceptron<double, rows, cols>(numbers, out, sigma_d, .1618, 100);
+        perceptron<double, rows, cols>(numbers, out, sigma_d, .1618, 1000);
     }
     end = std::chrono::system_clock::now();
 
