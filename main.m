@@ -49,6 +49,7 @@ function err = influence_noise(numbers, w, out, max_changes_per_row)
 end
 figure;
 plot(influence_noise(numbers, w, out, size(out, 1)));
+axis([0 9 0 100]);
 title('influence bruit en fction du nbre de changements par nombre');
 
 
@@ -59,10 +60,12 @@ function err_moyenne = influence_noise_mean(numbers, w, out, max_changes_per_row
         err_moyenne = err_moyenne + influence_noise(numbers, w, out, max_changes_per_row);
     end
     err_moyenne = err_moyenne / nb_tests;
+    disp(err_moyenne');
 end
 figure;
 plot(influence_noise_mean(numbers, w, out, size(out, 1), 100));
 title('influence moyenne du bruit en fction du nbre de changements par nombre');
+axis([0 9 0 100]);
 
 %figure('Name','evoluticlon erreur','NumberTitle','off');
 %plot(influence_iterations(60));
