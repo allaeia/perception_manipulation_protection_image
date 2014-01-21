@@ -29,13 +29,48 @@ function err = influence_iterations(max_iter)
     disp(err);
 end
 
-figure('Name','evoluticlon erreur','NumberTitle','off');
-plot(influence_iterations(60));
-
-tic
-for i=1:300
-perceptron( numbers, out, .1618, 1000);
+function numbers_noisy = noise(numbers, nb_changes)
+    numbers_noisy = numbers;
+    for i=1:nb_changes
+        for row=1:size(numbers,1)
+            col = ceil(rand()*size(numbers,2));
+            numbers_noisy(row, col) = -numbers(row, col);
+        end
+    end
 end
-toc
+
+function err = influence_noise(numbers, w, out, max_changes_per_row)
+    err = zeros(1, max_changes_per_row);
+    for changes=0:max_changes_per_row -1
+        numbers_noisy = noise(numbers,changes);        
+        res = xor(numbers_noisy*w>0, (out+1)/2);
+        err(1, changes+1) = 100* (res' * ones(size(out)) / size(out,1)); 
+    end
+end
+figure;
+plot(influence_noise(numbers, w, out, size(out, 1)));
+title('influence bruit en fction du nbre de changements par nombre');
+
+
+function err_moyenne = influence_noise_mean(numbers, w, out, max_changes_per_row, nb_tests)
+   err_moyenne = zeros(1, max_changes_per_row);
+    for i=1:nb_tests
+        size( influence_noise(numbers, w, out, max_changes_per_row))
+        err_moyenne = err_moyenne + influence_noise(numbers, w, out, max_changes_per_row);
+    end
+    err_moyenne = err_moyenne / nb_tests;
+end
+figure;
+plot(influence_noise_mean(numbers, w, out, size(out, 1), 100));
+title('influence moyenne du bruit en fction du nbre de changements par nombre');
+
+%figure('Name','evoluticlon erreur','NumberTitle','off');
+%plot(influence_iterations(60));
+
+%tic
+%for i=1:300
+%perceptron( numbers, out, .1618, 100);
+%end
+%toc
 
 end
