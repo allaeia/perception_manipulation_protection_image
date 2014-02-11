@@ -31,12 +31,12 @@ figure; imagesc(abs(w-img)); colormap('gray');colorbar; title('Difference entre 
 
 
 %% Question3
-function det = detecteur(key, gamma, threshold, img)
+function [corr, det] = detecteur(key, gamma, threshold, img)
     rng(key);
     % regenerate the same noise 
     u = gamma .* double(randn(size(img)));
     % Coefficient de correlation
-    corr = sum(dot(img, u))/(size(img,1)*size(img,2))
+    corr = sum(dot(img, u))/(size(img,1)*size(img,2));
     if corr > threshold
         det = 1;
     elseif ((corr > threshold) & (corr <= threshold))
@@ -55,8 +55,25 @@ det = detecteur(key, gamma, 10, w1)
 disp('Watermark detecte pour l''image d''origine');
 disp(detecteur(key, gamma, 10, img)); 
 
+corr0_m = zeros(1, size(img,1));
+corr1_m = zeros(1, size(img,1));
+corrn_m = zeros(1, size(img,1));
+for i=1:1000
+    key = rng;
+    w0 = watermark(img, 0, key, gamma);
+    w1 = watermark(img, 1, key, gamma);
+    [corr0, det] = detecteur(key, gamma, 10, w0);
+    [corr1, det] = detecteur(key, gamma, 10, w1);
+    [corr_n, det] = detecteur(key, gamma, 10, img);
+    corr0_m(i) = corr0;
+    corr1_m(i) = corr1;
+    corrn_m(i) = corr_n;
+end
+figure; plot(hist(corr0_m));
+figure; plot(hist(corr1_m));
+figure; plot(hist(corrn_m));
 
-figure; plot([imhist(w0/255), imhist(img/255), imhist(w1/255)]); legend('w0', 'img', 'w1');
+%figure; plot([hist(corr0_m), hist(corrn_m), hist(corr1_m)]); legend('w0', 'img', 'w1');
 end
 
 
