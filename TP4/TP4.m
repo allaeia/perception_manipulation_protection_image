@@ -22,11 +22,11 @@ figure; imagesc(u); colormap('gray'); colorbar; title('Bruit blanc');
 gamma = 10;
 function res = watermark(img, bit, key, gamma)
     rng(key);
-    u = double(randn(w, h));
+    u = double(randn(size(img)));
     res = img + gamma .* (-1)^bit .* u;
 end
 w = watermark(img, 0, key, gamma);
-figure; imagesc(w); colormap('gray');colorbar; title('Image marquee'); 
+figure; imagesc(w); colormap('gray');colorbar; title('Image marquee, (bit=0)'); 
 figure; imagesc(abs(w-img)); colormap('gray');colorbar; title('Difference entre image marquee et image d''origine');
 
 
@@ -45,12 +45,18 @@ function det = detecteur(key, gamma, threshold, img)
         det = 0;
     end
 end
-det = detecteur(key, gamma, 10, w)
 
-w0 = watermark(0, key, gamma);
-w1 = watermark(1, key, gamma);
-figure; imhist(w0);
+w0 = watermark(img, 0, key, gamma);
+w1 = watermark(img, 1, key, gamma);
+disp('Watermark detecte pour le bit 0');
+det = detecteur(key, gamma, 10, w0)
+disp('Watermark detecte pour le bit 1');
+det = detecteur(key, gamma, 10, w1)
+disp('Watermark detecte pour l''image d''origine');
+disp(detecteur(key, gamma, 10, img)); 
 
+
+figure; plot([imhist(w0/255), imhist(img/255), imhist(w1/255)]); legend('w0', 'img', 'w1');
 end
 
 
