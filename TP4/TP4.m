@@ -20,9 +20,12 @@ figure; imagesc(u); colormap('gray'); colorbar; title('Bruit blanc');
 
 %% Question 2
 gamma = 10;
-% We're hiding the bit b=0
-b=1;
-w = img + gamma .* (-1)^b .* u;
+function res = watermark(img, bit, key, gamma)
+    rng(key);
+    u = double(randn(w, h));
+    res = img + gamma .* (-1)^bit .* u;
+end
+w = watermark(img, 0, key, gamma);
 figure; imagesc(w); colormap('gray');colorbar; title('Image marquee'); 
 figure; imagesc(abs(w-img)); colormap('gray');colorbar; title('Difference entre image marquee et image d''origine');
 
@@ -43,6 +46,10 @@ function det = detecteur(key, gamma, threshold, img)
     end
 end
 det = detecteur(key, gamma, 10, w)
+
+w0 = watermark(0, key, gamma);
+w1 = watermark(1, key, gamma);
+figure; imhist(w0);
 
 end
 
