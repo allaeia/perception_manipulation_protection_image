@@ -6,7 +6,7 @@ img = imread('le_cervin.png');
 
 %% Question 1
 % save random seed as key
-key = rng;
+key = rng
 % generate random noise 
 u = randn(w, h);
 
