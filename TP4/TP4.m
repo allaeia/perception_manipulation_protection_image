@@ -69,8 +69,7 @@ for i=1:1000
     corr1_m(i) = corr1;
     corrn_m(i) = corr_n;
 end
-figure; plot([hist(corr0_m), hist(corrn_m), hist(corrn_m)]);
-%figure; plot([hist(corr0_m), hist(corrn_m), hist(corr1_m)]); legend('w0', 'img', 'w1');
+figure; plot([hist(corr0_m), hist(corrn_m), hist(corrn_m)]); legend('w0', 'img', 'w1');
 end
 
 
