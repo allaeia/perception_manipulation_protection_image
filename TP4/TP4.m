@@ -19,22 +19,30 @@ figure; imagesc(u); colormap('gray'); colorbar; title('Bruit blanc');
 
 
 %% Question 2
-gamma = 1;
-w = img + gamma .* (-1).^floor(u) * u;
-%w = img + gamma .* u;
-figure; imshow(w, [0 255]); colorbar; title('Image marquee'); 
-
-figure; imshow(abs(w-img)*20, [0 255]); title('Difference entre image marquee et image d''origine (x20)');
+gamma = 10;
+% We're hiding the bit b=0
+b=1;
+w = img + gamma .* (-1)^b .* u;
+figure; imagesc(w); colormap('gray');colorbar; title('Image marquee'); 
+figure; imagesc(abs(w-img)); colormap('gray');colorbar; title('Difference entre image marquee et image d''origine');
 
 
 %% Question3
-function dec = decode(key, img)
+function det = detecteur(key, gamma, threshold, img)
     rng(key);
     % regenerate the same noise 
-    u = double(randn(w, h));
+    u = gamma .* double(randn(size(img)));
+    % Coefficient de correlation
+    corr = sum(dot(img, u))/(size(img,1)*size(img,2))
+    if corr > threshold
+        det = 1;
+    elseif ((corr > threshold) & (corr <= threshold))
+        det = -1;
+    else
+        det = 0;
+    end
 end
-
-
+det = detecteur(key, gamma, 10, w)
 
 end
 
